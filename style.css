@@ -1,0 +1,37 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td {
+    width: 3em;
+    height: 3em;
+    text-align: center;
+    cursor: pointer;
+    transition: 50ms;
+    border: 1px solid;
+}
+
+/*
+tr:nth-child(even) .unclicked:nth-child(odd),
+tr:nth-child(odd) .unclicked:nth-child(even)
+{
+    background-color: #155900;
+}
+
+.unclicked {
+    background-color: #005944;
+}
+
+tr:nth-child(even) td:nth-child(odd):hover,
+tr:nth-child(odd) td:nth-child(even):hover,
+.unclicked:hover
+{
+    background-color: red;
+}*/
