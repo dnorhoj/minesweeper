@@ -8,12 +8,11 @@ function createTiles(width, height, bombs) {
     // Create tile template grid
     let tiles = [];
 
-    // Fill in all rows with null
     for (y=0; y<height; y++) {
         let row = [];
 
         for (x=0; x<width; x++) {
-            row.push(null);
+            row.push(false);
         }
         tiles.push(row);
     }
@@ -26,7 +25,7 @@ function createTiles(width, height, bombs) {
             x = randint(0, width);
             y = randint(0, height);
         }
-        while (tiles[y][x] == "x")
+        while (tiles[y][x] === "x")
         tiles[y][x] = "x";
     }
 
@@ -39,13 +38,13 @@ function createTiles(width, height, bombs) {
                 for(y1=-1; y1<=1; y1++) {
                     for(x1=-1; x1<=1; x1++) {
                         try {
-                            if(tiles[y+y1][x+x1] == "x") {
+                            if(tiles[y+y1][x+x1] === "x") {
                                 surrounding++;
                             }
                         } catch (TypeError) {}
                     }
                 }
-                tiles[y][x] = String(surrounding);
+                tiles[y][x] = surrounding;
             }
         }
     }
@@ -78,10 +77,48 @@ $(document).ready(() => {
     let tiles = createTiles(width, height, bombs);
     createGrid("#grid", width, height);
 
-    $("td").on("click", event => {
+    let click = event => {
         let t = $(event.target);
+        let x = t.attr("x");
+        let y = t.attr("y");
+
+        let tile = tiles[y][x];
+
+        t.off('click');
+        t.off("contextmenu")
+        t.removeAttr("class");
+        t.text(tile);
+
+        if(tile === 0) {
+            for(y1=-1; y1<=1; y1++) {
+                for(x1=-1; x1<=1; x1++) {
+                    let x2 = Number(t.attr("x"))+x1;
+                    let y2 = Number(t.attr("y"))+y1;
+
+                    try {
+                        $(".unclicked[x="+x2+"][y="+y2+"]").click()
+                    } catch(TypeError) {}
+                }
+            }
+        }
         console.log("Click! %c("+t.attr("x")+", "+t.attr("y")+")", "color: green");
-        t.text(tiles[t.attr("y")][t.attr("x")])
-        t.attr("class", "")
-    })
+    }
+
+    let rightclick = event => {
+        let t = $(event.target);
+
+        if(t.attr("class") === "unclicked") {
+            t.attr("class", "flag");
+            t.off("click");
+        } else {
+            t.attr("class", "unclicked");
+            t.on("click", click);
+        }
+
+        return false;
+    }
+
+    $("td").on("click", click);
+    $("td").on("contextmenu", rightclick);
+    $("table").on("contextmenu", () => {return false})
 });
