@@ -99,7 +99,7 @@ $(document).ready(() => {
                         try {
                             table.children()[y2].children[x2].click();
                         } catch (TypeError) { }
-                    }, 1);
+                    }, 0);
                 }
             }
             return;
