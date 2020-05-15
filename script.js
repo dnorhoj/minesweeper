@@ -74,6 +74,13 @@ $(document).ready(() => {
     let height = 14;
     let bombs = 40;
 
+    let wh = location.search.replace("?", "").split("x").map(Number);
+    if (wh.length === 3) {
+        width = wh[0];
+        height = wh[1];
+        bombs = wh[2];
+    }
+
     let table = $("#grid");
     let tiles = createTiles(width, height, bombs);
     let gameover = false;
